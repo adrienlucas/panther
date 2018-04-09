@@ -28,6 +28,7 @@ use Symfony\Component\Panther\DomCrawler\Form as PantherForm;
 use Symfony\Component\Panther\DomCrawler\Link as PantherLink;
 use Symfony\Component\Panther\ProcessManager\BrowserManagerInterface;
 use Symfony\Component\Panther\ProcessManager\ChromeManager;
+use Panthere\ProcessManager\FirefoxManager;
 use Symfony\Component\Panther\ProcessManager\SeleniumManager;
 
 /**
@@ -55,6 +56,11 @@ final class Client extends BaseClient implements WebDriver
     public static function createSeleniumClient(?string $host = null, ?WebDriverCapabilities $capabilities = null, ?string $baseUri = null): self
     {
         return new self(new SeleniumManager($host, $capabilities), $baseUri);
+    }
+
+    public static function createFirefoxClient(?string $geckodriverBinary = null): self
+    {
+        return new self(new FirefoxManager($geckodriverBinary));
     }
 
     public function __construct(BrowserManagerInterface $browserManager, ?string $baseUri = null)

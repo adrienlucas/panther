@@ -17,6 +17,7 @@ use Goutte\Client as GoutteClient;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\Panther\Client as PantherClient;
 use Symfony\Component\Panther\PantherTestCase;
+use Symfony\Component\Panther\ProcessManager\BrowserManagerInterface;
 
 /**
  * @author Kévin Dunglas <dunglas@gmail.com>
@@ -29,8 +30,9 @@ abstract class TestCase extends PantherTestCase
     {
         // Tests must pass with both Panther and Goutte
         return [
-            [[static::class, 'createGoutteClient'], GoutteClient::class],
-            [[static::class, 'createPantherClient'], PantherClient::class],
+            [[static::class, 'createGoutteClient'], GoutteClient::class, 'goutte'],
+            [[static::class, 'createPantherClient'], PantherClient::class, 'chrome'],
+            [function () { return self::createPanthereClient(self::FIREFOX); }, PanthereClient::class, 'firefox'],
         ];
     }
 

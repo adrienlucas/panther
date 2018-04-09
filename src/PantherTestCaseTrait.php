@@ -27,6 +27,9 @@ use Symfony\Component\Panther\ProcessManager\WebServerManager;
  */
 trait PantherTestCaseTrait
 {
+    public const CHROME = 'chrome';
+    public const FIREFOX = 'firefox';
+
     /**
      * @var string|null
      */
@@ -52,6 +55,11 @@ trait PantherTestCaseTrait
      */
     protected static $pantherClient;
 
+    /**
+     * @var PanthereClient|null
+     */
+    protected static $panthereFirefoxClient;
+
     public static function tearDownAfterClass()
     {
         if (null !== self::$webServerManager) {
@@ -62,6 +70,11 @@ trait PantherTestCaseTrait
         if (null !== self::$pantherClient) {
             self::$pantherClient->quit();
             self::$pantherClient = null;
+        }
+
+        if (null !== self::$panthereFirefoxClient) {
+            self::$panthereFirefoxClient->quit();
+            self::$panthereFirefoxClient = null;
         }
 
         if (null !== self::$goutteClient) {
@@ -88,9 +101,17 @@ trait PantherTestCaseTrait
         self::$baseUri = "http://$hostname:$port";
     }
 
-    protected static function createPantherClient(string $hostname = '127.0.0.1', int $port = 9000): PantherClient
+    protected static function createPantherClient(string $hostname = '127.0.0.1', int $port = 9000, string $browser = null): PantherClient
     {
         self::startWebServer(null, $hostname, $port);
+        if (self::FIREFOX === $browser) {
+            if (null === self::$panthereFirefoxClient) {
+                self::$panthereFirefoxClient = Client::createFirefoxClient();
+            }
+
+            return self::$panthereFirefoxClient;
+        }
+
         if (null === self::$pantherClient) {
             self::$pantherClient = Client::createChromeClient(null, null, [], self::$baseUri);
         }
