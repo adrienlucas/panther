@@ -32,7 +32,7 @@ abstract class TestCase extends PantherTestCase
         return [
             [[static::class, 'createGoutteClient'], GoutteClient::class, 'goutte'],
             [[static::class, 'createPantherClient'], PantherClient::class, 'chrome'],
-            [function () { return self::createPanthereClient(self::FIREFOX); }, PanthereClient::class, 'firefox'],
+            [function () { return self::createPantherClient(BrowserManagerInterface::FIREFOX_BROWSER); }, PantherClient::class, 'firefox'],
         ];
     }
 

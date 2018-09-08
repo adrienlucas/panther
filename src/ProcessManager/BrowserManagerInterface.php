@@ -30,6 +30,8 @@ use Facebook\WebDriver\WebDriver;
  */
 interface BrowserManagerInterface
 {
+    public const CHROME_BROWSER = 'chrome';
+    public const FIREFOX_BROWSER = 'firefox';
     /**
      * @throws \RuntimeException
      */

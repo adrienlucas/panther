@@ -16,6 +16,7 @@ namespace Symfony\Component\Panther;
 use Goutte\Client as GoutteClient;
 use GuzzleHttp\Client as GuzzleClient;
 use Symfony\Component\Panther\Client as PantherClient;
+use Symfony\Component\Panther\ProcessManager\BrowserManagerInterface;
 use Symfony\Component\Panther\ProcessManager\WebServerManager;
 
 /**
@@ -27,9 +28,6 @@ use Symfony\Component\Panther\ProcessManager\WebServerManager;
  */
 trait PantherTestCaseTrait
 {
-    public const CHROME = 'chrome';
-    public const FIREFOX = 'firefox';
-
     /**
      * @var string|null
      */
@@ -56,9 +54,9 @@ trait PantherTestCaseTrait
     protected static $pantherClient;
 
     /**
-     * @var PanthereClient|null
+     * @var PantherClient|null
      */
-    protected static $panthereFirefoxClient;
+    protected static $pantherFirefoxClient;
 
     public static function tearDownAfterClass()
     {
@@ -72,9 +70,9 @@ trait PantherTestCaseTrait
             self::$pantherClient = null;
         }
 
-        if (null !== self::$panthereFirefoxClient) {
-            self::$panthereFirefoxClient->quit();
-            self::$panthereFirefoxClient = null;
+        if (null !== self::$pantherFirefoxClient) {
+            self::$pantherFirefoxClient->quit();
+            self::$pantherFirefoxClient = null;
         }
 
         if (null !== self::$goutteClient) {
@@ -104,12 +102,12 @@ trait PantherTestCaseTrait
     protected static function createPantherClient(string $hostname = '127.0.0.1', int $port = 9000, string $browser = null): PantherClient
     {
         self::startWebServer(null, $hostname, $port);
-        if (self::FIREFOX === $browser) {
-            if (null === self::$panthereFirefoxClient) {
-                self::$panthereFirefoxClient = Client::createFirefoxClient();
+        if (BrowserManagerInterface::FIREFOX_BROWSER === $browser) {
+            if (null === self::$pantherFirefoxClient) {
+                self::$pantherFirefoxClient = Client::createFirefoxClient();
             }
 
-            return self::$panthereFirefoxClient;
+            return self::$pantherFirefoxClient;
         }
 
         if (null === self::$pantherClient) {

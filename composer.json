@@ -24,7 +24,7 @@
   ],
   "require": {
     "php": ">=7.2",
-    "facebook/webdriver": "dev-geckodriver",
+    "facebook/webdriver": "1.6.*",
     "symfony/browser-kit": "^4.0",
     "symfony/process": "^4.0"
   },
